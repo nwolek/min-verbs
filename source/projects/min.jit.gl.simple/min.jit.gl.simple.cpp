@@ -9,7 +9,7 @@
 
 using namespace c74::min;
 
-class jit_gl_simple : public object<jit_gl_simple>, gl_operator {
+class jit_gl_simple : public object<jit_gl_simple>, public gl_operator {
 public:
 	
 	MIN_DESCRIPTION { "Simple example of GL object using min." };
@@ -25,7 +25,7 @@ public:
 		description { "The width of our quad." },
 		setter { MIN_FUNCTION {
 			double in = args[0];
-			halfwidth = in / 2.;
+			halfwidth = in / 2.0;
 			return args;
 		}}
 	};
@@ -35,7 +35,7 @@ public:
 		description { "The height of our quad." },
 		setter { MIN_FUNCTION {
 			double in = args[0];
-			halfheight = in / 2.;
+			halfheight = in / 2.0;
 			return args;
 		}}
 	};
