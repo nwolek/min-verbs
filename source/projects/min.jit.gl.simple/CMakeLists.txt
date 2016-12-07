@@ -16,6 +16,7 @@ include_directories(
 
 set( SOURCE_FILES
 	${PROJECT_NAME}.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/jit.gl.h
 )
 
 
@@ -25,6 +26,12 @@ add_library(
 	${SOURCE_FILES}
 )
 
+find_package(OpenGL)
+
+target_link_libraries(
+    ${PROJECT_NAME}
+    ${OPENGL_gl_LIBRARY}
+)
 
 include(${C74_MIN_API_DIR}/script/min-posttarget.cmake)
 

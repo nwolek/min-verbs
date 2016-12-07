@@ -5,6 +5,7 @@
 ///	@license	Usage of this file and its contents is governed by the MIT License
 
 #include "c74_min.h"
+#include "jit.gl.h"
 
 using namespace c74::min;
 
@@ -14,41 +15,47 @@ public:
 	MIN_DESCRIPTION { "Simple example of GL object using min." };
 	MIN_TAGS		{ "OpenGL" };
 	MIN_AUTHOR		{ "Cycling '74" };
-	MIN_RELATED		{ "jit.clip" };
+	MIN_RELATED		{ "jit.gl.gridshape" };
 
 	inlet<>		input	{ this, "(matrix) Input", "matrix" };
 	outlet<>	output	{ this, "(matrix) Output", "matrix" };
 	
 
-	attribute<number> min { this, "min", 0.0,
-		description { "The minimum value below which clipping occurs." },
+	attribute<number> width { this, "width", 1.0,
+		description { "The width of our quad." },
 		setter { MIN_FUNCTION {
 			double in = args[0];
-			cmin = static_cast<uchar>(c74::max::clamp(255.0 * in, 0.0, 255.0));
+			halfwidth = in / 2.;
 			return args;
-		}},
-		getter { MIN_GETTER_FUNCTION {
-			return { cmin / 255.0 };
 		}}
 	};
 	
 	
-	attribute<number> max { this, "max", 1.0,
-		description { "The maximum value above which clipping occurs." },
+	attribute<number> height { this, "height", 1.0,
+		description { "The height of our quad." },
 		setter { MIN_FUNCTION {
 			double in = args[0];
-			cmax = static_cast<uchar>(c74::max::clamp(255.0 * in, 0.0, 255.0));
+			halfheight = in / 2.;
 			return args;
-		}},
-		getter { MIN_GETTER_FUNCTION {
-			return { cmax / 255.0 };
 		}}
 	};
 
-
+	message<> draw = { this, "draw", MIN_FUNCTION {
+		// draw our OpenGL geometry.
+		
+		glBegin(GL_QUADS);
+		glVertex3f(-halfwidth, -halfheight, 0);
+		glVertex3f(-halfwidth, halfheight, 0);
+		glVertex3f(halfwidth, halfheight, 0);
+		glVertex3f(halfwidth, -halfheight, 0);
+		glEnd();
+		
+		return {};
+	}};
+	
 private:
-	uchar	cmin;
-	uchar	cmax;
+	float	halfwidth;
+	float	halfheight;
 };
 
 MIN_EXTERNAL(jit_gl_simple);

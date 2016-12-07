@@ -3,7 +3,7 @@
 // Usage of this file and its contents is governed by the MIT License
 
 #include "c74_min_unittest.h"	// required unit test header
-#include "min.jit.clamp.cpp"	// need the source of our object so that we can access it
+#include "min.jit.gl.simple.cpp"	// need the source of our object so that we can access it
 
 // Unit tests are written using the Catch framework as described at
 // https://github.com/philsquared/Catch/blob/master/docs/tutorial.md
@@ -15,10 +15,10 @@ SCENARIO( "object produces correct output" ) {
 
 //		test_wrapper<jit_clamp> an_instance;
 //		jit_clamp& my_object = an_instance;
-		jit_clamp my_object;
+		jit_gl_simple my_object;
 
 		// check that default attr values are correct
-		atoms min = my_object.min;
+		/*atoms min = my_object.min;
 		REQUIRE( double(min[0]) == Approx(0.0) );
 
 		atoms max = my_object.max;
@@ -46,7 +46,7 @@ SCENARIO( "object produces correct output" ) {
 
 			REQUIRE( fresult != Approx(0.823961) );
 			REQUIRE( fresult == Approx(0.823529) );
-		}
+		}*/
 
 	}
 }
