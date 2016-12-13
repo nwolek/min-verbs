@@ -40,9 +40,9 @@ include(${C74_MIN_API_DIR}/script/min-posttarget.cmake)
 #############################################################
 
 include(${C74_MIN_API_DIR}/test/min-object-unittest.cmake)
-find_package(OpenGL)
-
-target_link_libraries(
-    ${PROJECT_NAME}
-    ${OPENGL_gl_LIBRARY}
-)
+#find_package(OpenGL)
+#
+#target_link_libraries(
+#    ${PROJECT_NAME}
+#    ${OPENGL_gl_LIBRARY}
+#)
