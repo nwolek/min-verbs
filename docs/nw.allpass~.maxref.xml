@@ -52,6 +52,11 @@
 			<description>Pass the input straight-through. </description>
 		</attribute>
 
+		<attribute name='delay' get='1' set='1' type='float64' size='1' >
+			<digest>Amount of time to delay input in milliseconds</digest>
+			<description>Amount of time to delay input in milliseconds. </description>
+		</attribute>
+
 	</attributelist>
 
 
