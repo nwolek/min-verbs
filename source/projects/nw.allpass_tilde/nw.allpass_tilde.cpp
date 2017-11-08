@@ -23,6 +23,7 @@ public:
 	// documentation purposes only.
 	argument<int> channel_count_arg { this, "channel_count", "The number of channels to process." };
 
+
 	allpass(const atoms& args = {}) {
 		if (!args.empty())
 			m_channel_count = args[0];
@@ -30,36 +31,10 @@ public:
 		for (auto i=0; i<m_channel_count; ++i) {
 			m_inlets.push_back(	 std::make_unique<inlet<>>(this, "(signal) audio input") );
 			m_outlets.push_back( std::make_unique<outlet<>>(this, "(signal) audio output", "signal") );
-			m_filters.push_back( std::make_unique<lib::allpass>(capacity) );
+			m_filters.push_back( std::make_unique<lib::allpass>() );
 		}
-        
-        // checking to see if set correctly
-        for (auto& filter : m_filters)
-            assert( filter->delay() == capacity);
 	}
-    
-    attribute<number> delay { this, "delay", 1.0,
-        title { "Delay time" },
-        description { "Amount of time to delay input in milliseconds." },
-        setter {
-            MIN_FUNCTION {
-                number delay_ms = args[0];
-                number delay_samples = delay_ms * samplerate() * 0.001;
-                
-                if (delay_samples > capacity) {
-                    delay_samples = capacity;
-                    delay_ms = ( delay_samples / samplerate() ) * 0.001;
-                }
-                
-                for (auto channel=0; channel<m_channel_count; ++channel) {
-                    auto&	f = *m_filters[channel];
-                    f.delay(delay_samples);
-                }
-                
-                return {delay_ms};
-            }
-        }
-    };
+
 
 	message<> clear { this, "clear",
 		"Reset the allpass filter. Because this is an IIR filter it has the potential to blow-up, requiring a reset.",
@@ -104,7 +79,6 @@ private:
 	int										m_channel_count = 1;		///< number of channels
 	vector< unique_ptr<inlet<>> >			m_inlets;				///< this object's inlets
 	vector< unique_ptr<outlet<>> >			m_outlets;				///< this object's outlets
-    int                                     capacity = 48000;       ///< largest delay allowed for allpass filters
 	vector< unique_ptr<lib::allpass> >      m_filters;				///< allpass filters for each channel
 };
 
