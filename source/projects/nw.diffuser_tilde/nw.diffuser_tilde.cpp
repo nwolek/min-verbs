@@ -11,6 +11,8 @@ using namespace c74::min;
 class diffuser : public object<diffuser>, public sample_operator<1,2> {
 private:
     // note: these must be created prior to any attributes that might set parameters below
+    lib::onepole        m_high_frequency_attenuation;          ///< onepole filter for input
+    
     lib::allpass		m_diffusion1a;				///< allpass filter 1a
     lib::allpass		m_diffusion1b;				///< allpass filter 1b
     lib::allpass		m_diffusion2a;				///< allpass filter 2a
@@ -39,6 +41,8 @@ public:
 		if (!args.empty())
 			// TODO: what happens when there are no arguments?
 
+        m_high_frequency_attenuation.coefficient(0.9995);
+            
         m_diffusion1a.delay(142);
         m_diffusion1a.gain(0.750);
         m_diffusion1b.delay(107);
@@ -71,7 +75,9 @@ public:
     /// Max takes care of squashing denormal for us by setting the FTZ bit on the CPU.
     
     samples<2> operator()(sample input) {
-        auto node_14 = m_diffusion1a(input);
+        auto node_10 = m_high_frequency_attenuation(input);
+        
+        auto node_14 = m_diffusion1a(node_10);
         auto node_20 = m_diffusion1b(node_14);
         auto node_16 = m_diffusion2a(node_20);
         auto node_22 = m_diffusion2b(node_16);
