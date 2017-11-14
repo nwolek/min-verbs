@@ -39,10 +39,15 @@ public:
 		if (!args.empty())
 			// TODO: what happens when there are no arguments?
 
-            m_diffusion1a.delay(142);
-            m_diffusion1b.delay(107);
-            m_diffusion2a.delay(379);
-            m_diffusion2b.delay(277);
+        m_diffusion1a.delay(142);
+        m_diffusion1a.gain(0.750);
+        m_diffusion1b.delay(107);
+        m_diffusion1b.gain(0.750);
+    
+        m_diffusion2a.delay(379);
+        m_diffusion2a.gain(0.625);
+        m_diffusion2b.delay(277);
+        m_diffusion2b.gain(0.625);
 	}
 
 
@@ -66,9 +71,12 @@ public:
     /// Max takes care of squashing denormal for us by setting the FTZ bit on the CPU.
     
     samples<2> operator()(sample input) {
+        auto node_14 = m_diffusion1a(input);
+        auto node_20 = m_diffusion1b(node_14);
+        auto node_16 = m_diffusion2a(node_20);
+        auto node_22 = m_diffusion2b(node_16);
         
-        
-        return {{ input, input }};
+        return {{ node_20, node_22 }};
     }
 
 };
