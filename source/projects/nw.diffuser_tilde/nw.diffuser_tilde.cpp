@@ -8,7 +8,7 @@
 
 using namespace c74::min;
 
-class diffuser : public object<diffuser>, public vector_operator<> {
+class diffuser : public object<diffuser>, public sample_operator<1,2> {
 public:
 
 	MIN_DESCRIPTION {	"Apply 4 allpass filters in series"
@@ -17,7 +17,12 @@ public:
 	MIN_AUTHOR		{	"Cycling '74"			};
 	MIN_RELATED		{	"allpass~, filterdesign"	};
 
+    
+    inlet<>			in1		{ this, "(signal) Input 1" };
+    outlet<>		out1	{ this, "(signal) Left Output", "signal" };
+    outlet<>		out2	{ this, "(signal) Right Output", "signal" };
 
+    /*
 	// Because our object defines a constructor (below) this argument definition is for
 	// documentation purposes only.
 	argument<int> channel_count_arg { this, "channel_count", "The number of channels to process." };
@@ -33,6 +38,7 @@ public:
 			m_filters.push_back( std::make_unique<lib::allpass>() );
 		}
 	}
+     */
 
 
 	message<> clear { this, "clear",
@@ -46,39 +52,22 @@ public:
 
 
 	attribute<bool>	bypass { this, "bypass" , false, description{"Pass the input straight-through."} };
-
-
-	/// Process N channels of audio
-	/// Max takes care of squashing denormal for us by setting the FTZ bit on the CPU.
-
-	void operator()(audio_bundle input, audio_bundle output) {
-		if (bypass)
-			output = input;
-		else {
-			for (auto channel=0; channel<m_channel_count; ++channel) {
-				auto	x = input.samples(channel);
-				auto	y = output.samples(channel);
-				auto&	f = *m_filters[channel];
-
-				for (auto i=0; i<input.frame_count(); ++i) {
-					y[i] = f(x[i]);
-				}
-			}
-		}
-	}
-
-
-	// Inherit the a sample_operator-style call for processing audio through the vector_operator above
-	// This can helpful (and is in this case) for writing cleaner unit tests
-
-	using vector_operator::operator();
+    
+    /// Process one sample
+    /// Max takes care of squashing denormal for us by setting the FTZ bit on the CPU.
+    
+    samples<2> operator()(sample input) {
+        
+        
+        return {{ input, input }};
+    }
 
 
 private:
-	int										m_channel_count = 1;		///< number of channels
-	vector< unique_ptr<inlet<>> >			m_inlets;				///< this object's inlets
-	vector< unique_ptr<outlet<>> >			m_outlets;				///< this object's outlets
-	vector< unique_ptr<lib::allpass> >	m_filters;				///< allpass filters for each channel
+	//int										m_channel_count = 1;		///< number of channels
+	//vector< unique_ptr<inlet<>> >			m_inlets;				///< this object's inlets
+	//vector< unique_ptr<outlet<>> >			m_outlets;				///< this object's outlets
+	vector< unique_ptr<lib::allpass> >      m_filters;				///< allpass filters for each channel
 };
 
 MIN_EXTERNAL(diffuser);
