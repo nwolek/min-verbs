@@ -13,10 +13,10 @@ private:
     // note: these must be created prior to any attributes that might set parameters below
     lib::onepole        m_high_frequency_attenuation;          ///< onepole filter for input
     
-    lib::allpass		m_diffusion1a;				///< allpass filter 1a
-    lib::allpass		m_diffusion1b;				///< allpass filter 1b
-    lib::allpass		m_diffusion2a;				///< allpass filter 2a
-    lib::allpass		m_diffusion2b;				///< allpass filter 2b
+    lib::allpass		m_input_diffusion_1a;				///< allpass filter 1a
+    lib::allpass		m_input_diffusion_1b;				///< allpass filter 1b
+    lib::allpass		m_input_diffusion_2a;				///< allpass filter 2a
+    lib::allpass		m_input_diffusion_2b;				///< allpass filter 2b
     
 public:
 
@@ -43,15 +43,15 @@ public:
 
         m_high_frequency_attenuation.coefficient(0.9995);
             
-        m_diffusion1a.delay(142);
-        m_diffusion1a.gain(0.750);
-        m_diffusion1b.delay(107);
-        m_diffusion1b.gain(0.750);
+        m_input_diffusion_1a.delay(142);
+        m_input_diffusion_1a.gain(0.750);
+        m_input_diffusion_1b.delay(107);
+        m_input_diffusion_1b.gain(0.750);
     
-        m_diffusion2a.delay(379);
-        m_diffusion2a.gain(0.625);
-        m_diffusion2b.delay(277);
-        m_diffusion2b.gain(0.625);
+        m_input_diffusion_2a.delay(379);
+        m_input_diffusion_2a.gain(0.625);
+        m_input_diffusion_2b.delay(277);
+        m_input_diffusion_2b.gain(0.625);
 	}
 
 
@@ -59,10 +59,10 @@ public:
 	message<> clear { this, "clear",
 		"Reset the allpass filters. Because this is an IIR filter it has the potential to blow-up, requiring a reset.",
 		MIN_FUNCTION {
-			m_diffusion1a.clear();
-			m_diffusion1b.clear();
-			m_diffusion2a.clear();
-			m_diffusion2b.clear();
+			m_input_diffusion_1a.clear();
+			m_input_diffusion_1b.clear();
+			m_input_diffusion_2a.clear();
+			m_input_diffusion_2b.clear();
 			
 			return {};
 		}
@@ -77,11 +77,13 @@ public:
     samples<2> operator()(sample input) {
         auto node_10 = m_high_frequency_attenuation(input);
         
-        auto node_14 = m_diffusion1a(node_10);
-        auto node_20 = m_diffusion1b(node_14);
-        auto node_16 = m_diffusion2a(node_20);
-        auto node_22 = m_diffusion2b(node_16);
+        // node numbering below comes from Dattoro 1997, page 662
+        auto node_14 = m_input_diffusion_1a(node_10);
+        auto node_20 = m_input_diffusion_1b(node_14);
+        auto node_16 = m_input_diffusion_2a(node_20);
+        auto node_22 = m_input_diffusion_2b(node_16);
         
+        // TODO: sending different nodes to each channel for testing
         return {{ node_20, node_22 }};
     }
 
