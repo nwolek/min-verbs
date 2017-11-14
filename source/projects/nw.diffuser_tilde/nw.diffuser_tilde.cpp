@@ -9,6 +9,13 @@
 using namespace c74::min;
 
 class diffuser : public object<diffuser>, public sample_operator<1,2> {
+private:
+    // note: these must be created prior to any attributes that might set parameters below
+    lib::allpass		m_diffusion1a;				///< allpass filter 1a
+    lib::allpass		m_diffusion1b;				///< allpass filter 1b
+    lib::allpass		m_diffusion2a;				///< allpass filter 2a
+    lib::allpass		m_diffusion2b;				///< allpass filter 2b
+    
 public:
 
 	MIN_DESCRIPTION {	"Apply 4 allpass filters in series"
@@ -26,26 +33,28 @@ public:
 	// Because our object defines a constructor (below) this argument definition is for
 	// documentation purposes only.
 	argument<int> channel_count_arg { this, "channel_count", "The number of channels to process." };
-
+     */
 
 	diffuser(const atoms& args = {}) {
 		if (!args.empty())
-			m_channel_count = args[0];
+			// TODO: what happens when there are no arguments?
 
-		for (auto i=0; i<m_channel_count; ++i) {
-			m_inlets.push_back(	 std::make_unique<inlet<>>(this, "(signal) audio input") );
-			m_outlets.push_back( std::make_unique<outlet<>>(this, "(signal) audio output", "signal") );
-			m_filters.push_back( std::make_unique<lib::allpass>() );
-		}
+            m_diffusion1a.delay(142);
+            m_diffusion1b.delay(107);
+            m_diffusion2a.delay(379);
+            m_diffusion2b.delay(277);
 	}
-     */
+
 
 
 	message<> clear { this, "clear",
-		"Reset the allpass filter. Because this is an IIR filter it has the potential to blow-up, requiring a reset.",
+		"Reset the allpass filters. Because this is an IIR filter it has the potential to blow-up, requiring a reset.",
 		MIN_FUNCTION {
-			for (auto& filter : m_filters)
-				filter->clear();
+			m_diffusion1a.clear();
+			m_diffusion1b.clear();
+			m_diffusion2a.clear();
+			m_diffusion2b.clear();
+			
 			return {};
 		}
 	};
@@ -62,12 +71,6 @@ public:
         return {{ input, input }};
     }
 
-
-private:
-	//int										m_channel_count = 1;		///< number of channels
-	//vector< unique_ptr<inlet<>> >			m_inlets;				///< this object's inlets
-	//vector< unique_ptr<outlet<>> >			m_outlets;				///< this object's outlets
-	vector< unique_ptr<lib::allpass> >      m_filters;				///< allpass filters for each channel
 };
 
 MIN_EXTERNAL(diffuser);

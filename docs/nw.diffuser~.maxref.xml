@@ -31,8 +31,8 @@
 	<methodlist>
 
 		<method name='clear'>
-			<digest>Reset the allpass filter</digest>
-			<description>Reset the allpass filter. Because this is an IIR filter it has the potential to blow-up, requiring a reset. </description>
+			<digest>Reset the allpass filters</digest>
+			<description>Reset the allpass filters. Because this is an IIR filter it has the potential to blow-up, requiring a reset. </description>
 		</method>
 
 	</methodlist>
