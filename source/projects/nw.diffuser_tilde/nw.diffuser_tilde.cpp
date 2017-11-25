@@ -16,8 +16,10 @@ private:
     
     lib::allpass		m_input_diffusion_1a;				///< allpass filter 1a
     lib::allpass		m_input_diffusion_1b;				///< allpass filter 1b
+    fifo<double>        m_input_diffusion_1_coefficient { 10 };       ///< coefficient for allpass filters 1a & 1b
     lib::allpass		m_input_diffusion_2a;				///< allpass filter 2a
     lib::allpass		m_input_diffusion_2b;				///< allpass filter 2b
+    fifo<double>        m_input_diffusion_2_coefficient { 10 };       ///< coefficient for allpass filters 2a & 2b
     
 public:
 
@@ -64,6 +66,24 @@ public:
         }}
     };
     
+    
+    attribute<double, threadsafe::no, limit::clamp> input_diffusion1_coefficient { this, "input diffusion 1 coefficient", 0.750,
+        range { 0.0, 1.0 },
+        setter { MIN_FUNCTION {
+            m_input_diffusion_1_coefficient.try_enqueue(args[0]);
+            return args;
+        }}
+    };
+    
+    
+    attribute<double, threadsafe::no, limit::clamp> input_diffusion2_coefficient { this, "input diffusion 2 coefficient", 0.625,
+        range { 0.0, 1.0 },
+        setter { MIN_FUNCTION {
+            m_input_diffusion_2_coefficient.try_enqueue(args[0]);
+            return args;
+        }}
+    };
+    
 
 	message<> clear { this, "clear",
 		"Reset the allpass filters. Because this is an IIR filter it has the potential to blow-up, requiring a reset.",
@@ -88,6 +108,14 @@ public:
         number x;
         while (m_high_frequency_coefficient.try_dequeue(x)) {
             m_high_frequency_attenuation.coefficient(x);
+        }
+        while (m_input_diffusion_1_coefficient.try_dequeue(x)) {
+            m_input_diffusion_1a.gain(x);
+            m_input_diffusion_1b.gain(x);
+        }
+        while (m_input_diffusion_2_coefficient.try_dequeue(x)) {
+            m_input_diffusion_2a.gain(x);
+            m_input_diffusion_2b.gain(x);
         }
         
         auto node_10 = m_high_frequency_attenuation(input);

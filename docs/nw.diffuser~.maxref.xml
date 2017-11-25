@@ -47,6 +47,16 @@
 			<description>Pass the input straight-through. </description>
 		</attribute>
 
+		<attribute name='input diffusion 2 coefficient' get='1' set='1' type='float64' size='1' >
+			<digest></digest>
+			<description></description>
+		</attribute>
+
+		<attribute name='input diffusion 1 coefficient' get='1' set='1' type='float64' size='1' >
+			<digest></digest>
+			<description></description>
+		</attribute>
+
 		<attribute name='input damping coefficient' get='1' set='1' type='float64' size='1' >
 			<digest></digest>
 			<description></description>
