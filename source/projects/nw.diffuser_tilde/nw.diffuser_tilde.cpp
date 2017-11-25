@@ -12,6 +12,7 @@ class diffuser : public object<diffuser>, public sample_operator<1,2> {
 private:
     // note: these must be created prior to any attributes that might set parameters below
     lib::onepole        m_high_frequency_attenuation;          ///< onepole filter for input
+    fifo<double>        m_high_frequency_coefficient { 10 };       ///< coefficient for onepole filter
     
     lib::allpass		m_input_diffusion_1a;				///< allpass filter 1a
     lib::allpass		m_input_diffusion_1b;				///< allpass filter 1b
@@ -55,6 +56,14 @@ public:
 	}
 
 
+    attribute<double, threadsafe::no, limit::clamp> input_damping_coefficient { this, "input damping coefficient", 0.9995,
+        range { 0.0, 1.0 },
+        setter { MIN_FUNCTION {
+            m_high_frequency_coefficient.try_enqueue(args[0]);
+            return args;
+        }}
+    };
+    
 
 	message<> clear { this, "clear",
 		"Reset the allpass filters. Because this is an IIR filter it has the potential to blow-up, requiring a reset.",
@@ -75,6 +84,12 @@ public:
     /// Max takes care of squashing denormal for us by setting the FTZ bit on the CPU.
     
     samples<2> operator()(sample input) {
+        
+        number x;
+        while (m_high_frequency_coefficient.try_dequeue(x)) {
+            m_high_frequency_attenuation.coefficient(x);
+        }
+        
         auto node_10 = m_high_frequency_attenuation(input);
         
         // node numbering below comes from Dattoro 1997, page 662
@@ -86,6 +101,7 @@ public:
         // TODO: sending different nodes to each channel for testing
         return {{ node_20, node_22 }};
     }
+   
 
 };
 
