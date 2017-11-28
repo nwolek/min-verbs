@@ -6,8 +6,8 @@
 
 <c74object name='nw.testverb~' category='audio,  filters'>
 
-	<digest>Apply 4 allpass filters in series </digest>
-	<description>Apply 4 allpass filters in series </description>
+	<digest>Beginnings of new gverb implementation</digest>
+	<description>Beginnings of new gverb implementation. </description>
 
 
 	<!--METADATA-->
