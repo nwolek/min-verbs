@@ -21,8 +21,11 @@ private:
     lib::allpass		m_decay_diffusion_1L;				///< allpass filter 1L (TODO: modulation)
     lib::allpass		m_decay_diffusion_1R;				///< allpass filter 1R (TODO: modulation)
     
-    number              m_last_out_L;                       ///< last sample from the left channel
-    number              m_last_out_R;                       ///< last sample from the right channel
+    lib::delay<>        m_delay_1L = lib::delay<>(4453);    ///< delay 1L
+    lib::delay<>        m_delay_2L = lib::delay<>(3720);    ///< delay 2L
+    
+    sample              m_last_out_L;                       ///< last sample from the left channel
+    //sample              m_last_out_R;                       ///< last sample from the right channel
     
     
 public:
@@ -59,6 +62,9 @@ public:
         m_input_diffusion_2a.gain(0.625);
         m_input_diffusion_2b.delay(277);
         m_input_diffusion_2b.gain(0.625);
+        
+        //m_delay_1L.size(4453);
+        //m_delay_2L.size(3720);
 	}
 
 
@@ -88,10 +94,14 @@ public:
         auto node_14 = m_input_diffusion_1a(node_10);
         auto node_20 = m_input_diffusion_1b(node_14);
         auto node_16 = m_input_diffusion_2a(node_20);
-        auto node_22 = m_input_diffusion_2b(node_16);
+        auto node_22 = m_input_diffusion_2b(node_16) + 0.5 * m_last_out_L;
+        
+        auto node_30 = m_delay_1L(node_22);
+        auto node_33 = 0.5 * node_30;
+        auto node_39 = m_delay_2L(node_33);
         
         // TODO: sending different nodes to each channel for testing
-        return {{ node_20, node_22 }};
+        return {{ node_30, node_39 }};
     }
 
 };
