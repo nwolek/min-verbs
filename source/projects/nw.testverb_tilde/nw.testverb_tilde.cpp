@@ -7,30 +7,30 @@
 #include "c74_min.h"
 
 using namespace c74::min;
+using namespace c74::min::lib;
 
 class testverb : public object<testverb>, public sample_operator<1,2> {
 private:
     // note: these must be created prior to any attributes that might set parameters below
-    lib::onepole        m_high_frequency_attenuation;          ///< onepole filter for input
+    onepole         m_high_frequency_attenuation;    ///< onepole filter for input
     
-    lib::allpass		m_input_diffusion_1a;				///< allpass filter 1a
-    lib::allpass		m_input_diffusion_1b;				///< allpass filter 1b
-    lib::allpass		m_input_diffusion_2a;				///< allpass filter 2a
-    lib::allpass		m_input_diffusion_2b;				///< allpass filter 2b
+    allpass         m_input_diffusion_1a = allpass(142);           ///< allpass filter 1a
+    allpass         m_input_diffusion_1b = allpass(107);           ///< allpass filter 1b
+    allpass         m_input_diffusion_2a = allpass(379);           ///< allpass filter 2a
+    allpass         m_input_diffusion_2b = allpass(277);           ///< allpass filter 2b
     
-    lib::allpass		m_decay_diffusion_1L;				///< allpass filter 1L (TODO: modulation)
-    lib::allpass		m_decay_diffusion_1R;				///< allpass filter 1R (TODO: modulation)
+    allpass         m_decay_diffusion_1L = allpass(672);           ///< allpass filter 1L (TODO: modulation)
+    allpass         m_decay_diffusion_1R = allpass(908);           ///< allpass filter 1R (TODO: modulation)
     
-    lib::delay<>        m_delay_1L = lib::delay<>(4453);    ///< delay 1L
-    lib::delay<>        m_delay_2L = lib::delay<>(3720);    ///< delay 2L
+    delay<>         m_delay_1L = delay<>(4453);                     ///< delay 1L
+    delay<>         m_delay_2L = delay<>(3720);                     ///< delay 2L
     
-    sample              m_last_out_L;                       ///< last sample from the left channel
-    //sample              m_last_out_R;                       ///< last sample from the right channel
-    
-    
+    sample          m_last_out_L;                   ///< last sample from the left channel
+    //sample            m_last_out_R;                   ///< last sample from the right channel
+
 public:
 
-	MIN_DESCRIPTION {	"Apply 4 allpass filters in series"
+	MIN_DESCRIPTION {	"Beginnings of new gverb implementation."
 	};
 	MIN_TAGS		{	"audio, filters"		};
 	MIN_AUTHOR		{	"Cycling '74"			};
@@ -53,18 +53,12 @@ public:
 
         m_high_frequency_attenuation.coefficient(0.9995);
             
-        m_input_diffusion_1a.delay(142);
         m_input_diffusion_1a.gain(0.750);
-        m_input_diffusion_1b.delay(107);
         m_input_diffusion_1b.gain(0.750);
     
-        m_input_diffusion_2a.delay(379);
         m_input_diffusion_2a.gain(0.625);
-        m_input_diffusion_2b.delay(277);
         m_input_diffusion_2b.gain(0.625);
-        
-        //m_delay_1L.size(4453);
-        //m_delay_2L.size(3720);
+
 	}
 
 

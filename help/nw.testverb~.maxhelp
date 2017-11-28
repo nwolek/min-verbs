@@ -44,7 +44,6 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "signal" ],
 					"patching_rect" : [ 235.0, 405.0, 29.5, 23.0 ],
-					"presentation_rect" : [ 258.0, 374.0, 0.0, 0.0 ],
 					"style" : "",
 					"text" : "+~"
 				}
@@ -70,7 +69,6 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 15.0, 280.0, 28.0, 21.0 ],
-					"presentation_rect" : [ 15.0, 281.0, 0.0, 0.0 ],
 					"style" : "",
 					"text" : "dry"
 				}
@@ -85,7 +83,6 @@
 					"outlettype" : [ "int" ],
 					"parameter_enable" : 0,
 					"patching_rect" : [ 15.0, 305.0, 24.0, 24.0 ],
-					"presentation_rect" : [ 16.0, 306.0, 0.0, 0.0 ],
 					"style" : ""
 				}
 
