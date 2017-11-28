@@ -14,19 +14,19 @@ private:
     // note: these must be created prior to any attributes that might set parameters below
     onepole         m_high_frequency_attenuation;    ///< onepole filter for input
     
-    allpass         m_input_diffusion_1a = allpass(142);           ///< allpass filter 1a
-    allpass         m_input_diffusion_1b = allpass(107);           ///< allpass filter 1b
-    allpass         m_input_diffusion_2a = allpass(379);           ///< allpass filter 2a
-    allpass         m_input_diffusion_2b = allpass(277);           ///< allpass filter 2b
+    allpass         m_input_diffusion_1a { 142 };           ///< allpass filter 1a
+    allpass         m_input_diffusion_1b { 107 };           ///< allpass filter 1b
+    allpass         m_input_diffusion_2a { 379 };           ///< allpass filter 2a
+    allpass         m_input_diffusion_2b { 277 };           ///< allpass filter 2b
     
-    allpass         m_decay_diffusion_1L = allpass(672);           ///< allpass filter 1L (TODO: modulation)
-    allpass         m_decay_diffusion_1R = allpass(908);           ///< allpass filter 1R (TODO: modulation)
+    allpass         m_decay_diffusion_1L { 672 };           ///< allpass filter 1L (TODO: modulation)
+    allpass         m_decay_diffusion_1R { 908 };           ///< allpass filter 1R (TODO: modulation)
     
-    delay<>         m_delay_1L = delay<>(4453);                     ///< delay 1L
-    delay<>         m_delay_2L = delay<>(3720);                     ///< delay 2L
+    delay<>         m_delay_1L { 4453 };                     ///< delay 1L
+    delay<>         m_delay_2L { 3720 };                     ///< delay 2L
     
-    delay<>         m_delay_1R = delay<>(4217);                     ///< delay 1L
-    delay<>         m_delay_2R = delay<>(3163);                     ///< delay 2L
+    delay<>         m_delay_1R { 4217 };                     ///< delay 1L
+    delay<>         m_delay_2R { 3163 };                     ///< delay 2L
     
     sample          m_last_out_L;                   ///< last sample from the left channel
     sample          m_last_out_R;                   ///< last sample from the right channel
