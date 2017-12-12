@@ -25,6 +25,12 @@ private:
     delay<>         m_delay_1L { 4453 };                     ///< delay 1L
     delay<>         m_delay_2L { 3720 };                     ///< delay 2L
     
+    onepole         m_damping_1L { };                        ///< damping left
+    onepole         m_damping_1R { };                        ///< damping right
+    
+    allpass         m_decay_diffusion_2L { 1800 };           ///< allpass filter 2L
+    allpass         m_decay_diffusion_2R { 2656 };           ///< allpass filter 2L
+    
     delay<>         m_delay_1R { 4217 };                     ///< delay 1L
     delay<>         m_delay_2R { 3163 };                     ///< delay 2L
     
@@ -64,6 +70,12 @@ public:
         
         m_decay_diffusion_1L.gain(-0.70);
         m_decay_diffusion_1R.gain(-0.70);
+        
+        m_damping_1L.coefficient(0.0005);
+        m_damping_1R.coefficient(0.0005);
+        
+        m_decay_diffusion_2L.gain(0.5);
+        m_decay_diffusion_2R.gain(0.5);
 
 	}
 
@@ -76,6 +88,10 @@ public:
 			m_input_diffusion_1b.clear();
 			m_input_diffusion_2a.clear();
 			m_input_diffusion_2b.clear();
+            m_decay_diffusion_1L.clear();
+            m_decay_diffusion_1R.clear();
+            m_decay_diffusion_2L.clear();
+            m_decay_diffusion_2R.clear();
 			
 			return {};
 		}
@@ -102,14 +118,16 @@ public:
         auto node_23 = node_22 + 0.5 * m_last_out_R;
         auto node_24 = m_decay_diffusion_1L(node_23);
         auto node_30 = m_delay_1L(node_24);
-        auto node_33 = 0.5 * node_30;
+        auto node_31 = 0.5 * m_damping_1L(node_30);
+        auto node_33 = m_decay_diffusion_2L(node_31);
         auto node_39 = m_delay_2L(node_33);
         
         // right channel decays
         auto node_46 = node_22 + 0.5 * m_last_out_L;
         auto node_48 = m_decay_diffusion_1R(node_46);
         auto node_54 = m_delay_1R(node_48);
-        auto node_59 = 0.5 * node_54;
+        auto node_55 = 0.5 * m_damping_1R(node_54);
+        auto node_59 = m_decay_diffusion_2R(node_55);
         auto node_63 = m_delay_2R(node_59);
         
         m_last_out_L = node_39;
