@@ -8,7 +8,11 @@
 
 using namespace c74::min;
 
-class allpass : public object<allpass>, public vector_operator<> {
+class allpass : public object<allpass>, public sample_operator<1,2> {
+private:
+    // note: these must be created prior to any attributes that might set parameters below
+    lib::allpass        m_allpass_filter { 44100 };        ///< allpass filter
+    
 public:
 
 	MIN_DESCRIPTION {	"Apply allpass filter. "
@@ -18,68 +22,42 @@ public:
 	MIN_AUTHOR		{	"Cycling '74"			};
 	MIN_RELATED		{	"allpass~, filterdesign"	};
 
-
-	// Because our object defines a constructor (below) this argument definition is for
-	// documentation purposes only.
-	argument<int> channel_count_arg { this, "channel_count", "The number of channels to process." };
-
+    
+    inlet<>			in1		{ this, "(signal) Input 1" };
+    outlet<>		out1	{ this, "(signal) Left Output", "signal" };
+    outlet<>		out2	{ this, "(signal) Right Output", "signal" };
 
 	allpass(const atoms& args = {}) {
 		if (!args.empty())
-			m_channel_count = args[0];
+			// TODO: what happens when there are no arguments?
 
-		for (auto i=0; i<m_channel_count; ++i) {
-			m_inlets.push_back(	 std::make_unique<inlet<>>(this, "(signal) audio input") );
-			m_outlets.push_back( std::make_unique<outlet<>>(this, "(signal) audio output", "signal") );
-			m_filters.push_back( std::make_unique<lib::allpass>() );
-		}
+        m_allpass_filter.delay(10);
+        m_allpass_filter.gain(0.75);
 	}
 
 
 	message<> clear { this, "clear",
 		"Reset the allpass filter. Because this is an IIR filter it has the potential to blow-up, requiring a reset.",
 		MIN_FUNCTION {
-			for (auto& filter : m_filters)
-				filter->clear();
+            m_allpass_filter.clear();
 			return {};
 		}
 	};
+    
+    
+    attribute<bool>	bypass { this, "bypass" , false, description{"Pass the input straight-through."} };
 
-
-	attribute<bool>	bypass { this, "bypass" , false, description{"Pass the input straight-through."} };
-
-
-	/// Process N channels of audio
+	/// Process one sample
 	/// Max takes care of squashing denormal for us by setting the FTZ bit on the CPU.
 
-	void operator()(audio_bundle input, audio_bundle output) {
-		if (bypass)
-			output = input;
-		else {
-			for (auto channel=0; channel<m_channel_count; ++channel) {
-				auto	x = input.samples(channel);
-				auto	y = output.samples(channel);
-				auto&	f = *m_filters[channel];
-
-				for (auto i=0; i<input.frame_count(); ++i) {
-					y[i] = f(x[i]);
-				}
-			}
-		}
+	samples<2> operator()(sample input) {
+		
+        auto output = m_allpass_filter(input);
+        
+        return {{ output, output }};
 	}
 
-
-	// Inherit the a sample_operator-style call for processing audio through the vector_operator above
-	// This can helpful (and is in this case) for writing cleaner unit tests
-
-	using vector_operator::operator();
-
-
-private:
-	int										m_channel_count = 1;		///< number of channels
-	vector< unique_ptr<inlet<>> >			m_inlets;				///< this object's inlets
-	vector< unique_ptr<outlet<>> >			m_outlets;				///< this object's outlets
-	vector< unique_ptr<lib::allpass> >      m_filters;				///< allpass filters for each channel
+    
 };
 
 MIN_EXTERNAL(allpass);
