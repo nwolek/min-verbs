@@ -28,7 +28,7 @@ TEST_CASE( "produces valid impulse response" ) {
 	// run the calculations
 	for (auto x : impulse) {
 		auto y = my_object(x);
-		//output.push_back(y);
+		output.push_back(y);
 	}
 	
 	// get a reference impulse response to compare against

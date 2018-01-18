@@ -8,7 +8,7 @@
 
 using namespace c74::min;
 
-class allpass : public object<allpass>, public sample_operator<1,2> {
+class allpass : public object<allpass>, public sample_operator<1,1> {
 private:
     // note: these must be created prior to any attributes that might set parameters below
     lib::allpass        m_allpass_filter { 44100 };        ///< allpass filter
@@ -25,14 +25,16 @@ public:
     
     inlet<>			in1		{ this, "(signal) Input 1" };
     outlet<>		out1	{ this, "(signal) Left Output", "signal" };
-    outlet<>		out2	{ this, "(signal) Right Output", "signal" };
+    //outlet<>		out2	{ this, "(signal) Right Output", "signal" };
 
 	allpass(const atoms& args = {}) {
-		if (!args.empty())
+        if (!args.empty()) {
 			// TODO: what happens when there are no arguments?
+        }
 
-        m_allpass_filter.delay(10);
+        m_allpass_filter.delay(142);
         m_allpass_filter.gain(0.75);
+        
 	}
 
 
@@ -50,11 +52,14 @@ public:
 	/// Process one sample
 	/// Max takes care of squashing denormal for us by setting the FTZ bit on the CPU.
 
-	samples<2> operator()(sample input) {
+	sample operator()(sample input) {
+        
+        //m_allpass_filter.delay(10);
+        //m_allpass_filter.gain(0.75);
 		
         auto output = m_allpass_filter(input);
         
-        return {{ output, output }};
+        return { output };
 	}
 
     

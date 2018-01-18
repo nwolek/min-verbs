@@ -107,21 +107,21 @@
 								"filekind" : "audiofile",
 								"loop" : 1,
 								"content_state" : 								{
-									"speed" : [ 1.0 ],
-									"originallength" : [ 0.0, "ticks" ],
-									"play" : [ 0 ],
-									"pitchcorrection" : [ 0 ],
-									"formantcorrection" : [ 0 ],
-									"pitchshift" : [ 1.0 ],
-									"mode" : [ "basic" ],
 									"formant" : [ 1.0 ],
+									"mode" : [ "basic" ],
 									"basictuning" : [ 440 ],
 									"originaltempo" : [ 120.0 ],
 									"originallengthms" : [ 0.0 ],
 									"timestretch" : [ 0 ],
-									"quality" : [ "basic" ],
+									"speed" : [ 1.0 ],
 									"followglobaltempo" : [ 0 ],
-									"slurtime" : [ 0.0 ]
+									"slurtime" : [ 0.0 ],
+									"quality" : [ "basic" ],
+									"originallength" : [ 0.0, "ticks" ],
+									"play" : [ 0 ],
+									"pitchcorrection" : [ 0 ],
+									"formantcorrection" : [ 0 ],
+									"pitchshift" : [ 1.0 ]
 								}
 
 							}
@@ -353,9 +353,9 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "signal" ],
-					"patching_rect" : [ 200.0, 350.0, 73.0, 22.0 ],
+					"patching_rect" : [ 200.0, 350.0, 83.0, 22.0 ],
 					"style" : "",
-					"text" : "nw.allpass~"
+					"text" : "nw.allpass~ 0"
 				}
 
 			}
@@ -473,7 +473,7 @@
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-1", 0 ],
+					"destination" : [ "obj-14", 0 ],
 					"source" : [ "obj-19", 0 ]
 				}
 
