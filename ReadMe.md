@@ -24,10 +24,7 @@ For Max 6.1, replace the first line above with the following, and then proceed w
 
 	cd ~/Documents/Max/Packages
 
-If you do not have Git installed, you can [download the latest release here](https://github.com/nwolek/min-verbs/releases). After decompressing the zip archive, the resulting folder can be placed in one of the following folders:
-
-* `~/Documents/Max\ 7/Packages`
-* `~/Documents/Max/Packages`
+This project has not yet reached the release phase, so there are no release versions at this time.
 
 ## Bug reporting
 If you feel that you have found a bug, please report it via [the Issues section](https://github.com/nwolek/min-verbs/issues) of this GitHub project site.
