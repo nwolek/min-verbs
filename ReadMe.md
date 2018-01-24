@@ -24,7 +24,7 @@ For Max 6.1, replace the first line above with the following, and then proceed w
 
 	cd ~/Documents/Max/Packages
 
-This project has not yet reached the release phase, so there are no release versions at this time.
+This project has not yet reached the release phase, so there are no release versions at this time. If you would like to build the source files in this package, you can follow the [build instructions found here](https://github.com/Cycling74/min-devkit#building).
 
 ## Bug reporting
 If you feel that you have found a bug, please report it via [the Issues section](https://github.com/nwolek/min-verbs/issues) of this GitHub project site.
