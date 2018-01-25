@@ -14,6 +14,7 @@ private:
     
     size_t              m_samples_per_second = samplerate();
     lib::allpass        m_allpass_filter { m_samples_per_second };        ///< allpass filter
+    bool                m_needs_to_be_cleared = false;
     
 public:
 
@@ -62,7 +63,11 @@ public:
 	message<> clear { this, "clear",
 		"Reset the allpass filter. Because this is an IIR filter it has the potential to blow-up, requiring a reset.",
 		MIN_FUNCTION {
-            m_allpass_filter.clear();
+            
+            // This message sets a local variable that is checked during call to the operator and triggers clearing
+            // This ensures that we only access the delay memory on the audio thread.
+            
+            m_needs_to_be_cleared = true;
 			return {};
 		}
 	};
@@ -98,6 +103,10 @@ public:
 	/// Max takes care of squashing denormal for us by setting the FTZ bit on the CPU.
 
 	sample operator()(sample input) {
+        
+        if (m_needs_to_be_cleared) {
+            m_allpass_filter.clear();
+        }
 		
         auto output = m_allpass_filter(input);
         
