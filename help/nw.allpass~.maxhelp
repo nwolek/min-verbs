@@ -38,12 +38,25 @@
 		"subpatcher_template" : "tap.template",
 		"boxes" : [ 			{
 				"box" : 				{
+					"attr" : "delay time",
+					"id" : "obj-5",
+					"maxclass" : "attrui",
+					"numinlets" : 1,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 35.0, 225.0, 200.0, 23.0 ],
+					"style" : ""
+				}
+
+			}
+, 			{
+				"box" : 				{
 					"id" : "obj-4",
 					"maxclass" : "newobj",
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "signal" ],
-					"patching_rect" : [ 370.0, 385.0, 29.5, 23.0 ],
+					"patching_rect" : [ 385.0, 330.0, 29.5, 23.0 ],
 					"style" : "",
 					"text" : "*~"
 				}
@@ -57,7 +70,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 35.0, 290.0, 150.0, 23.0 ],
+					"patching_rect" : [ 35.0, 290.0, 200.0, 23.0 ],
 					"style" : ""
 				}
 
@@ -133,21 +146,21 @@
 								"filekind" : "audiofile",
 								"loop" : 1,
 								"content_state" : 								{
-									"formant" : [ 1.0 ],
-									"followglobaltempo" : [ 0 ],
-									"formantcorrection" : [ 0 ],
-									"quality" : [ "basic" ],
-									"originallengthms" : [ 0.0 ],
-									"play" : [ 0 ],
-									"speed" : [ 1.0 ],
-									"mode" : [ "basic" ],
-									"basictuning" : [ 440 ],
-									"slurtime" : [ 0.0 ],
 									"pitchshift" : [ 1.0 ],
-									"timestretch" : [ 0 ],
-									"pitchcorrection" : [ 0 ],
+									"quality" : [ "basic" ],
+									"mode" : [ "basic" ],
+									"formant" : [ 1.0 ],
+									"basictuning" : [ 440 ],
+									"speed" : [ 1.0 ],
 									"originaltempo" : [ 120.0 ],
-									"originallength" : [ 0.0, "ticks" ]
+									"originallengthms" : [ 0.0 ],
+									"timestretch" : [ 0 ],
+									"followglobaltempo" : [ 0 ],
+									"slurtime" : [ 0.0 ],
+									"originallength" : [ 0.0, "ticks" ],
+									"play" : [ 0 ],
+									"pitchcorrection" : [ 0 ],
+									"formantcorrection" : [ 0 ]
 								}
 
 							}
@@ -238,7 +251,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "int" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 245.0, 250.0, 20.0, 20.0 ],
+					"patching_rect" : [ 310.0, 250.0, 20.0, 20.0 ],
 					"style" : ""
 				}
 
@@ -252,7 +265,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 245.0, 280.0, 67.0, 22.0 ],
+					"patching_rect" : [ 310.0, 280.0, 67.0, 22.0 ],
 					"style" : "",
 					"text" : "bypass $1"
 				}
@@ -267,7 +280,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 200.0, 250.0, 39.0, 22.0 ],
+					"patching_rect" : [ 265.0, 250.0, 39.0, 22.0 ],
 					"style" : "",
 					"text" : "clear"
 				}
@@ -283,9 +296,9 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "signal" ],
-					"patching_rect" : [ 199.0, 385.0, 83.0, 22.0 ],
+					"patching_rect" : [ 199.0, 385.0, 73.0, 22.0 ],
 					"style" : "",
-					"text" : "nw.allpass~ 0"
+					"text" : "nw.allpass~"
 				}
 
 			}
@@ -410,6 +423,13 @@
 				"patchline" : 				{
 					"destination" : [ "obj-16", 0 ],
 					"source" : [ "obj-37", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-1", 0 ],
+					"source" : [ "obj-5", 0 ]
 				}
 
 			}

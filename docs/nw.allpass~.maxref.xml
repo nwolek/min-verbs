@@ -47,6 +47,11 @@
 			<description>Pass the input straight-through. </description>
 		</attribute>
 
+		<attribute name='delay time' get='1' set='1' type='float64' size='1' >
+			<digest>Duration of delay in milliseconds</digest>
+			<description>Duration of delay in milliseconds. This value will control which frequencies exhibit phase changes. Above 40.0, the delayed signals become audible echoes. </description>
+		</attribute>
+
 		<attribute name='gain coefficient' get='1' set='1' type='float64' size='1' >
 			<digest>Control the intensity of the allpass effect</digest>
 			<description>Control the intensity of the allpass effect. This value is applied to the undelayed input and delayed feedback. At 0.0, this filter will function as a feedforward delay. At 1.0 or -1.0, the feedback will become unstable. </description>
