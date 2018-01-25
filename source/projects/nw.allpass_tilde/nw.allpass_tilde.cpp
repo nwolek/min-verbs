@@ -33,10 +33,11 @@ public:
 			// TODO: what happens when there are no arguments?
         }
 
-        m_allpass_filter.delay(142);
+        //m_allpass_filter.delay(142);
         //m_allpass_filter.gain(0.75);
         
 	}
+    
     
     attribute<double, threadsafe::yes, limit::clamp> gain_coefficient { this, "gain coefficient",
         0.75,
@@ -44,6 +45,19 @@ public:
         range { -1.0, 1.0 },
         setter { MIN_FUNCTION {
             m_allpass_filter.gain(args[0]);
+            return args;
+        }}
+    };
+    
+    
+    attribute<double, threadsafe::no, limit::clamp> delay_time { this, "delay time",
+        1.0,
+        description{"Duration of delay in milliseconds. This value will control the frequencies that exhibit phase changes. Above 40.0, the delayed signals become audible echoes."},
+        range { 0.0, 1000.0 },
+        setter { MIN_FUNCTION {
+            number new_delay_time = args[0];
+            int delay_samps = new_delay_time * 0.001 * samplerate(); // NW: For now, we truncate to the nearest sample
+            m_allpass_filter.delay(delay_samps);
             return args;
         }}
     };
