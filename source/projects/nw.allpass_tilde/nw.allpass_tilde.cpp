@@ -15,6 +15,7 @@ private:
     size_t              m_samples_per_second = samplerate();
     lib::allpass        m_allpass_filter { m_samples_per_second };        ///< allpass filter
     bool                m_needs_to_be_cleared = false;
+    int                 m_delay_samps = 0;
     
 public:
 
@@ -53,8 +54,8 @@ public:
         range { 0.0, 1000.0 },
         setter { MIN_FUNCTION {
             number new_delay_time = args[0];
-            int delay_samps = new_delay_time * 0.001 * samplerate(); // NW: For now, we truncate to the nearest sample
-            m_allpass_filter.delay(delay_samps);
+            m_delay_samps = new_delay_time * 0.001 * samplerate(); // NW: For now, we truncate to the nearest sample
+            
             return args;
         }}
     };
@@ -116,6 +117,7 @@ public:
             
         } else {
             
+            m_allpass_filter.delay(m_delay_samps);
             output = m_allpass_filter(input);
             
         }
