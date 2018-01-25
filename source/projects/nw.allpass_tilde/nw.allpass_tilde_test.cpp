@@ -58,3 +58,65 @@ TEST_CASE( "produces valid impulse response" ) {
 	// check it
 	REQUIRE( output == reference );
 }
+
+// NW: borrowed and adapted the following from dcblocker tests
+SCENARIO( "responds appropriately to messages and attrs" ) {
+    
+    // create an input buffer to process... 10 cycles of a cos wave
+    const int		buffersize = 1024;
+    sample_vector	input(buffersize);
+    
+    std::generate(input.begin(), input.end(), lib::generator::cosine<sample>(buffersize, 10));
+    
+    GIVEN( "An instance of allpass~" ) {
+        allpass	my_object;
+        
+        REQUIRE( my_object.bypass == false );	// default attr value
+        
+        WHEN( "the bypass attr is turned-on" ) {
+            my_object.bypass = true;
+            
+            sample_vector output;
+            for (auto x : input) {
+                auto y = my_object(x);
+                output.push_back(y);
+            }
+            
+            THEN( "the output is identical to the input" )
+            REQUIRE( output == input );
+        }
+        AND_WHEN( "the bypass is turned back off" ) {
+            my_object.bypass = false;
+            
+            sample_vector output;
+            for (auto x : input) {
+                auto y = my_object(x);
+                output.push_back(y);
+            }
+            
+            THEN( "the output is processed again" )
+            REQUIRE( output != input );
+        }
+        WHEN( "the input goes silent" ) {
+            // dirty the history first
+            for (auto x : input) {
+                my_object(x);
+            }
+            
+            // then zero and process
+            std::fill_n(input.begin(), buffersize, 0.0);
+            
+            sample_vector output;
+            for (auto x : input) {
+                auto y = my_object(x);
+                output.push_back(y);
+            }
+            
+            THEN( "the input is all zeroes" )
+            REQUIRE( input == sample_vector(buffersize, 0.0) );
+            AND_THEN( "the output will not immediately go down zero" )
+            REQUIRE( output != input );
+        }
+        //
+    }
+}
