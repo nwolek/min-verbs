@@ -34,12 +34,12 @@ public:
         }
 
         m_allpass_filter.delay(142);
-        m_allpass_filter.gain(0.75);
+        //m_allpass_filter.gain(0.75);
         
 	}
     
     attribute<double, threadsafe::yes, limit::clamp> gain_coefficient { this, "gain coefficient",
-        0.0,
+        0.75,
         description{"Control the intensity of the allpass effect. This value is applied to the undelayed input and delayed feedback. At 0.0, this filter will function as a feedforward delay. At 1.0 or -1.0, the feedback will become unstable."}, 
         range { -1.0, 1.0 },
         setter { MIN_FUNCTION {
