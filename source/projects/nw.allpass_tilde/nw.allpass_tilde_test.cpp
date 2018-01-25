@@ -14,6 +14,9 @@ TEST_CASE( "produces valid impulse response" ) {
 	// create an instance of our object
 	test_wrapper<allpass> an_instance;
 	allpass& my_object = an_instance;
+    
+    REQUIRE( my_object.delay_time == 1.0 );             // check default attribute value
+    REQUIRE( my_object.gain_coefficient == 0.75 );      // check default attribute value
 
 	// create an impulse buffer to process
 	const int		buffersize = 256;
@@ -31,8 +34,26 @@ TEST_CASE( "produces valid impulse response" ) {
 		output.push_back(y);
 	}
 	
-	// get a reference impulse response to compare against
-	auto reference = lib::filters::generate_impulse_response({1.0,-1.0}, {1.0,-0.9997}, buffersize);
+	// set up a reference impulse response to compare against
+    // calculated in Octave using impz(a,b,256)
+    sample_vector reference = {
+        0.75, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.4375, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, -0.328125, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0.24609375, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        -0.1845703125, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.138427734375, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    };
 	
 	// check it
 	REQUIRE( output == reference );
