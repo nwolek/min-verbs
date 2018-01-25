@@ -108,7 +108,17 @@ public:
             m_allpass_filter.clear();
         }
 		
-        auto output = m_allpass_filter(input);
+        sample output;
+        
+        if (bypass) {
+            
+            output = input;
+            
+        } else {
+            
+            output = m_allpass_filter(input);
+            
+        }
         
         return { output };
 	}
