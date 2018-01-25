@@ -11,6 +11,7 @@ using namespace c74::min;
 class allpass : public object<allpass>, public sample_operator<1,1> {
 private:
     // note: these must be created prior to any attributes that might set parameters below
+    
     lib::allpass        m_allpass_filter { 44100 };        ///< allpass filter
     
 public:
@@ -36,6 +37,16 @@ public:
         m_allpass_filter.gain(0.75);
         
 	}
+    
+    attribute<double, threadsafe::yes, limit::clamp> gain_coefficient { this, "gain coefficient",
+        0.0,
+        description{"Control the intensity of the allpass effect. This value is applied to the undelayed input and delayed feedback. At 0.0, this filter will function as a feedforward delay. At 1.0 or -1.0, the feedback will become unstable."}, 
+        range { -1.0, 1.0 },
+        setter { MIN_FUNCTION {
+            m_allpass_filter.gain(args[0]);
+            return args;
+        }}
+    };
 
 
 	message<> clear { this, "clear",
