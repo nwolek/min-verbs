@@ -25,18 +25,13 @@ public:
 	MIN_RELATED		{	"allpass~, filterdesign"	};
 
     
-    inlet<>			in1		{ this, "(signal) Input 1" };
-    outlet<>		out1	{ this, "(signal) Left Output", "signal" };
-    //outlet<>		out2	{ this, "(signal) Right Output", "signal" };
+    inlet<>			in1		{ this, "(signal) Input" };
+    outlet<>		out1	{ this, "(signal) Output", "signal" };
 
 	allpass(const atoms& args = {}) {
         if (!args.empty()) {
 			// TODO: what happens when there are no arguments?
         }
-
-        //m_allpass_filter.delay(142);
-        //m_allpass_filter.gain(0.75);
-        
 	}
     
     
@@ -103,9 +98,6 @@ public:
 	/// Max takes care of squashing denormal for us by setting the FTZ bit on the CPU.
 
 	sample operator()(sample input) {
-        
-        //m_allpass_filter.delay(10);
-        //m_allpass_filter.gain(0.75);
 		
         auto output = m_allpass_filter(input);
         
