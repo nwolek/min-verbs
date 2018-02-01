@@ -120,3 +120,66 @@ SCENARIO( "responds appropriately to messages and attrs" ) {
         //
     }
 }
+
+// NW: developed in response to issue here: https://github.com/nwolek/min-verbs/issues/5
+TEST_CASE( "survives a sudden drop in delay time without crashing" ) {
+    
+    INFO( "Start with a new instance of the allpass object." );
+    // create an instance of our object
+    test_wrapper<allpass> an_instance;
+    allpass& my_object = an_instance;
+    
+    // create a vector to save output from our object's processing
+    sample_vector	output;
+    
+    INFO( "Check the samplerate to make sure it looks right." );
+    // call the dspsetup to set the samplerate
+    my_object.dspsetup();
+    
+    // the allpass object has internal storage size based on the sample rate, so we need this value
+    size_t current_sample_rate = my_object.samplerate();
+    
+    REQUIRE( current_sample_rate > 10000 ); // make sure we didn't get a bogus value before testing
+    
+    INFO( "Setup an impulse that is just shorter than the allpass circular_storage." );
+    // create an impulse buffer to process
+    const int		buffersize = current_sample_rate - 1000;
+    sample_vector	impulse(buffersize);
+    
+    std::fill_n(impulse.begin(), buffersize, 0.0);
+    impulse[0] = 1.0;
+    
+    // change the delay_time to something larger than the default
+    INFO( "Change the delay_time attribute to 100 ms." );
+    my_object.delay_time = 100.0;
+    
+    REQUIRE( my_object.delay_time == 100.0 );
+    // note that this is our object's attribute only
+    // value does not actually get changed for the allpass circular_storage until the next call to its sample_operator
+    
+    // run the calculations
+    INFO( "Push the impulse sample_vector through the allpass object one time." );
+    for (auto x : impulse) {
+        auto y = my_object(x);
+        output.push_back(y);
+    }
+    
+    // change the delay_time to something smaller
+    INFO( "Change the delay_time attribute to 5 ms." );
+    my_object.delay_time = 5.0;
+    
+    REQUIRE( my_object.delay_time == 5.0 );
+    // note that this is our object's attribute only
+    // value does not actually get changed for the allpass circular_storage until the next call to its sample_operator
+    
+    // run the calculations again, which should wrap around the internal circular_storage
+    INFO( "Push the impulse sample_vector through the allpass object another time." );
+    for (auto x : impulse) {
+        // CRASH HAPPENS HERE
+        auto y = my_object(x);
+        output.push_back(y);
+    }
+    
+
+    
+}
