@@ -32,7 +32,7 @@
 
 		<method name='clear'>
 			<digest>Reset the delay filter</digest>
-			<description>Reset the delay filter. Because this is an IIR filter it has the potential to blow-up, requiring a reset. </description>
+			<description>Reset the delay filter. Erases the contents of internal memory. </description>
 		</method>
 
 	</methodlist>
@@ -45,6 +45,11 @@
 		<attribute name='bypass' get='1' set='1' type='long' size='1' >
 			<digest>Pass the input straight-through</digest>
 			<description>Pass the input straight-through. </description>
+		</attribute>
+
+		<attribute name='delay time' get='1' set='1' type='float64' size='1' >
+			<digest>Duration of delay in milliseconds</digest>
+			<description>Duration of delay in milliseconds. </description>
 		</attribute>
 
 	</attributelist>
