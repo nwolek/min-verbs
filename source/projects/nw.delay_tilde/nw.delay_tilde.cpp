@@ -30,10 +30,9 @@ public:
     outlet<>		out1	{ this, "(signal) Output", "signal" };
 
 	delay(const atoms& args = {}) {
-		if (!args.empty())
+        if (!args.empty()) {
 			// TODO: what happens when there are no arguments?
-
-        m_delay.size(10);
+        }
         
 	}
     
