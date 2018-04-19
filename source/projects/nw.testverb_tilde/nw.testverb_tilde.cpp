@@ -41,6 +41,8 @@ private:
     sample          m_last_out_L;                   ///< last sample from the left channel
     sample          m_last_out_R;                   ///< last sample from the right channel
 	
+	fifo<double>        m_reverb_decay_coefficient { 10 };       ///< RT60 decay coefficient
+	
 	bool            m_needs_to_be_cleared = false;
 
 public:
@@ -68,6 +70,16 @@ public:
 		}
 	}
 
+	
+	attribute<double, threadsafe::no, limit::clamp> reverb_decay_time {
+		this, "reverb decay time", 3000.0,
+		range { 1.0, 30000.0 },
+		setter { MIN_FUNCTION {
+			number new_reverb_time = args[0];
+			m_reverb_decay_coefficient.try_enqueue(pow(10.0, (-16416.0 / (new_reverb_time * samplerate() * 0.001))));
+			return args;
+		}}
+	};
 
 
 	message<> clear { this, "clear",
@@ -104,6 +116,11 @@ public:
 		
 		samples<2> output;
 		
+		number x, decay_coeff;
+		while (m_reverb_decay_coefficient.try_dequeue(x)) {
+			decay_coeff = x;
+		}
+		
 		if (bypass) {
 			
 			output = {{ input, input }};
@@ -121,18 +138,18 @@ public:
 			auto node_22 = m_input_diffusion_2b(node_16);
 			
 			// left channel processing
-			auto node_23 = node_22 + 0.5 * m_last_out_R;
+			auto node_23 = node_22 + decay_coeff * m_last_out_R;
 			auto node_24 = m_decay_diffusion_1L(node_23);
 			auto node_30 = m_delay_1L(node_24);
-			auto node_31 = 0.5 * m_damping_1L(node_30);
+			auto node_31 = decay_coeff * m_damping_1L(node_30);
 			auto node_33 = m_decay_diffusion_2L(node_31);
 			auto node_39 = m_delay_2L(node_33);
 			
 			// right channel processing
-			auto node_46 = node_22 + 0.5 * m_last_out_L;
+			auto node_46 = node_22 + decay_coeff * m_last_out_L;
 			auto node_48 = m_decay_diffusion_1R(node_46);
 			auto node_54 = m_delay_1R(node_48);
-			auto node_55 = 0.5 * m_damping_1R(node_54);
+			auto node_55 = decay_coeff * m_damping_1R(node_54);
 			auto node_59 = m_decay_diffusion_2R(node_55);
 			auto node_63 = m_delay_2R(node_59);
 			

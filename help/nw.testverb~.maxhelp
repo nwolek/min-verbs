@@ -102,21 +102,21 @@
 								"filekind" : "audiofile",
 								"loop" : 1,
 								"content_state" : 								{
-									"mode" : [ "basic" ],
-									"originaltempo" : [ 120.0 ],
-									"originallengthms" : [ 0.0 ],
-									"formant" : [ 1.0 ],
+									"formantcorrection" : [ 0 ],
+									"pitchshift" : [ 1.0 ],
+									"speed" : [ 1.0 ],
 									"quality" : [ "basic" ],
+									"mode" : [ "basic" ],
+									"pitchcorrection" : [ 0 ],
+									"originaltempo" : [ 120.0 ],
+									"originallength" : [ 0.0, "ticks" ],
+									"originallengthms" : [ 0.0 ],
+									"slurtime" : [ 0.0 ],
+									"formant" : [ 1.0 ],
+									"timestretch" : [ 0 ],
 									"play" : [ 0 ],
 									"followglobaltempo" : [ 0 ],
-									"basictuning" : [ 440 ],
-									"formantcorrection" : [ 0 ],
-									"speed" : [ 1.0 ],
-									"pitchshift" : [ 1.0 ],
-									"pitchcorrection" : [ 0 ],
-									"originallength" : [ 0.0, "ticks" ],
-									"slurtime" : [ 0.0 ],
-									"timestretch" : [ 0 ]
+									"basictuning" : [ 440 ]
 								}
 
 							}
@@ -233,7 +233,7 @@
 			}
 , 			{
 				"box" : 				{
-					"attr" : "input damping coefficient",
+					"attr" : "reverb decay time in milliseconds",
 					"id" : "obj-26",
 					"maxclass" : "attrui",
 					"numinlets" : 1,
