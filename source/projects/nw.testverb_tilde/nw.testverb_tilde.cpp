@@ -12,24 +12,24 @@ using namespace c74::min::lib;
 class testverb : public object<testverb>, public sample_operator<1,2> {
 private:
     // note: these must be created prior to any attributes that might set parameters below
-    onepole         m_high_frequency_attenuation;    ///< onepole filter for input
+	onepole         m_high_frequency_attenuation { 0.0005 };    ///< onepole filter for input
     
-    allpass         m_input_diffusion_1a { 142 };           ///< allpass filter 1a
-    allpass         m_input_diffusion_1b { 107 };           ///< allpass filter 1b
-    allpass         m_input_diffusion_2a { 379 };           ///< allpass filter 2a
-    allpass         m_input_diffusion_2b { 277 };           ///< allpass filter 2b
+    allpass         m_input_diffusion_1a { 142, 0.750 };           ///< allpass filter 1a
+    allpass         m_input_diffusion_1b { 107, 0.750 };           ///< allpass filter 1b
+    allpass         m_input_diffusion_2a { 379, 0.625 };           ///< allpass filter 2a
+    allpass         m_input_diffusion_2b { 277, 0.625 };           ///< allpass filter 2b
     
-    allpass         m_decay_diffusion_1L { 672 };           ///< allpass filter 1L (TODO: modulation)
-    allpass         m_decay_diffusion_1R { 908 };           ///< allpass filter 1R (TODO: modulation)
+    allpass         m_decay_diffusion_1L { 672, -0.70 };           ///< allpass filter 1L (TODO: modulation)
+    allpass         m_decay_diffusion_1R { 908, -0.70 };           ///< allpass filter 1R (TODO: modulation)
     
     delay<>         m_delay_1L { 4453 };                     ///< delay 1L
     delay<>         m_delay_2L { 3720 };                     ///< delay 2L
     
-    onepole         m_damping_1L { };                        ///< damping left
-    onepole         m_damping_1R { };                        ///< damping right
+    onepole         m_damping_1L { 0.0005 };                        ///< damping left
+    onepole         m_damping_1R { 0.0005 };                        ///< damping right
     
-    allpass         m_decay_diffusion_2L { 1800 };           ///< allpass filter 2L
-    allpass         m_decay_diffusion_2R { 2656 };           ///< allpass filter 2L
+    allpass         m_decay_diffusion_2L { 1800, 0.5 };           ///< allpass filter 2L
+    allpass         m_decay_diffusion_2R { 2656, 0.5 };           ///< allpass filter 2L
     
     delay<>         m_delay_1R { 4217 };                     ///< delay 1L
     delay<>         m_delay_2R { 3163 };                     ///< delay 2L
@@ -57,26 +57,9 @@ public:
      */
 
 	testverb(const atoms& args = {}) {
-		if (!args.empty())
+		if (!args.empty()) {
 			// TODO: what happens when there are no arguments?
-
-        m_high_frequency_attenuation.coefficient(0.9995);
-            
-        m_input_diffusion_1a.gain(0.750);
-        m_input_diffusion_1b.gain(0.750);
-    
-        m_input_diffusion_2a.gain(0.625);
-        m_input_diffusion_2b.gain(0.625);
-        
-        m_decay_diffusion_1L.gain(-0.70);
-        m_decay_diffusion_1R.gain(-0.70);
-        
-        m_damping_1L.coefficient(0.0005);
-        m_damping_1R.coefficient(0.0005);
-        
-        m_decay_diffusion_2L.gain(0.5);
-        m_decay_diffusion_2R.gain(0.5);
-
+		}
 	}
 
 
