@@ -98,37 +98,50 @@ public:
 			m_needs_to_be_cleared = false;
 		}
 		
-        auto node_10 = m_high_frequency_attenuation(input);
-        
-        // node numbering below comes from Dattoro 1997, page 662
-        
-        // initial diffusion
-        auto node_14 = m_input_diffusion_1a(node_10);
-        auto node_20 = m_input_diffusion_1b(node_14);
-        auto node_16 = m_input_diffusion_2a(node_20);
-        auto node_22 = m_input_diffusion_2b(node_16);
-        
-        // left channel decays
-        auto node_23 = node_22 + 0.5 * m_last_out_R;
-        auto node_24 = m_decay_diffusion_1L(node_23);
-        auto node_30 = m_delay_1L(node_24);
-        auto node_31 = 0.5 * m_damping_1L(node_30);
-        auto node_33 = m_decay_diffusion_2L(node_31);
-        auto node_39 = m_delay_2L(node_33);
-        
-        // right channel decays
-        auto node_46 = node_22 + 0.5 * m_last_out_L;
-        auto node_48 = m_decay_diffusion_1R(node_46);
-        auto node_54 = m_delay_1R(node_48);
-        auto node_55 = 0.5 * m_damping_1R(node_54);
-        auto node_59 = m_decay_diffusion_2R(node_55);
-        auto node_63 = m_delay_2R(node_59);
-        
-        m_last_out_L = node_39;
-        m_last_out_R = node_63;
-        
-        // TODO: sending different nodes to each channel for testing
-        return {{ node_39, node_63 }};
+		samples<2> output;
+		
+		if (bypass) {
+			
+			output = {{ input, input }};
+			
+		} else {
+		
+			auto node_10 = m_high_frequency_attenuation(input);
+			
+			// node numbering below comes from Dattoro 1997, page 662
+			
+			// initial diffusion
+			auto node_14 = m_input_diffusion_1a(node_10);
+			auto node_20 = m_input_diffusion_1b(node_14);
+			auto node_16 = m_input_diffusion_2a(node_20);
+			auto node_22 = m_input_diffusion_2b(node_16);
+			
+			// left channel decays
+			auto node_23 = node_22 + 0.5 * m_last_out_R;
+			auto node_24 = m_decay_diffusion_1L(node_23);
+			auto node_30 = m_delay_1L(node_24);
+			auto node_31 = 0.5 * m_damping_1L(node_30);
+			auto node_33 = m_decay_diffusion_2L(node_31);
+			auto node_39 = m_delay_2L(node_33);
+			
+			// right channel decays
+			auto node_46 = node_22 + 0.5 * m_last_out_L;
+			auto node_48 = m_decay_diffusion_1R(node_46);
+			auto node_54 = m_delay_1R(node_48);
+			auto node_55 = 0.5 * m_damping_1R(node_54);
+			auto node_59 = m_decay_diffusion_2R(node_55);
+			auto node_63 = m_delay_2R(node_59);
+			
+			m_last_out_L = node_39;
+			m_last_out_R = node_63;
+			
+			// TODO: sending different nodes to each channel for testing
+			output = {{ node_39, node_63 }};
+			
+		}
+		
+		return { output };
+		
     }
 
 };
