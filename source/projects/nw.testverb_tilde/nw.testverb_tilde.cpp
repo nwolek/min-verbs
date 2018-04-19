@@ -12,6 +12,10 @@ using namespace c74::min::lib;
 class testverb : public object<testverb>, public sample_operator<1,2> {
 private:
     // note: these must be created prior to any attributes that might set parameters below
+	
+	// default parameters below come from Dattoro 1997, page 663
+	
+	// note: coefficient is 1-value that Dattoro gives becasue min-lib onepole implementation is different
 	onepole         m_high_frequency_attenuation { 0.0005 };    ///< onepole filter for input
     
     allpass         m_input_diffusion_1a { 142, 0.750 };           ///< allpass filter 1a
@@ -106,9 +110,9 @@ public:
 			
 		} else {
 		
-			auto node_10 = m_high_frequency_attenuation(input);
-			
 			// node numbering below comes from Dattoro 1997, page 662
+			
+			auto node_10 = m_high_frequency_attenuation(input);
 			
 			// initial diffusion
 			auto node_14 = m_input_diffusion_1a(node_10);
