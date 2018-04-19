@@ -120,7 +120,7 @@ public:
 			auto node_16 = m_input_diffusion_2a(node_20);
 			auto node_22 = m_input_diffusion_2b(node_16);
 			
-			// left channel decays
+			// left channel processing
 			auto node_23 = node_22 + 0.5 * m_last_out_R;
 			auto node_24 = m_decay_diffusion_1L(node_23);
 			auto node_30 = m_delay_1L(node_24);
@@ -128,7 +128,7 @@ public:
 			auto node_33 = m_decay_diffusion_2L(node_31);
 			auto node_39 = m_delay_2L(node_33);
 			
-			// right channel decays
+			// right channel processing
 			auto node_46 = node_22 + 0.5 * m_last_out_L;
 			auto node_48 = m_decay_diffusion_1R(node_46);
 			auto node_54 = m_delay_1R(node_48);
@@ -136,11 +136,13 @@ public:
 			auto node_59 = m_decay_diffusion_2R(node_55);
 			auto node_63 = m_delay_2R(node_59);
 			
+			// save for feedback
 			m_last_out_L = node_39;
 			m_last_out_R = node_63;
 			
-			// TODO: sending different nodes to each channel for testing
-			output = {{ node_39, node_63 }};
+			// formulas for output taps come from Dattoro 1997, page 665
+			output = {{ 1.2 * node_54 - 0.6 * node_59 + 0.6 * node_63 - 0.6 * node_30 - 0.6 * node_33 - 0.6 * node_39,
+						1.2 * node_30 - 0.6 * node_33 + 0.6 * node_39 - 0.6 * node_54 - 0.6 * node_59 - 0.6 * node_63 }};
 			
 		}
 		
