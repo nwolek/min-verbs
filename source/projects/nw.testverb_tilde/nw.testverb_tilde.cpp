@@ -36,6 +36,8 @@ private:
     
     sample          m_last_out_L;                   ///< last sample from the left channel
     sample          m_last_out_R;                   ///< last sample from the right channel
+	
+	bool            m_needs_to_be_cleared = false;
 
 public:
 
@@ -67,15 +69,11 @@ public:
 	message<> clear { this, "clear",
 		"Reset the allpass filters. Because this is an IIR filter it has the potential to blow-up, requiring a reset.",
 		MIN_FUNCTION {
-			m_input_diffusion_1a.clear();
-			m_input_diffusion_1b.clear();
-			m_input_diffusion_2a.clear();
-			m_input_diffusion_2b.clear();
-            m_decay_diffusion_1L.clear();
-            m_decay_diffusion_1R.clear();
-            m_decay_diffusion_2L.clear();
-            m_decay_diffusion_2R.clear();
 			
+			// This message sets a local variable that is checked during call to the operator and triggers clearing
+			// This ensures that we only access the delay memory on the audio thread.
+			
+			m_needs_to_be_cleared = true;
 			return {};
 		}
 	};
@@ -87,6 +85,19 @@ public:
     /// Max takes care of squashing denormal for us by setting the FTZ bit on the CPU.
     
     samples<2> operator()(sample input) {
+		
+		if (m_needs_to_be_cleared) {
+			m_input_diffusion_1a.clear();
+			m_input_diffusion_1b.clear();
+			m_input_diffusion_2a.clear();
+			m_input_diffusion_2b.clear();
+			m_decay_diffusion_1L.clear();
+			m_decay_diffusion_1R.clear();
+			m_decay_diffusion_2L.clear();
+			m_decay_diffusion_2R.clear();
+			m_needs_to_be_cleared = false;
+		}
+		
         auto node_10 = m_high_frequency_attenuation(input);
         
         // node numbering below comes from Dattoro 1997, page 662

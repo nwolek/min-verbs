@@ -106,7 +106,8 @@ public:
 	sample operator()(sample input) {
         
         if (m_needs_to_be_cleared) {
-            m_allpass_filter.clear();
+			m_allpass_filter.clear();
+			m_needs_to_be_cleared = false;
         }
 		
         sample output;

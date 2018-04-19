@@ -102,21 +102,21 @@
 								"filekind" : "audiofile",
 								"loop" : 1,
 								"content_state" : 								{
-									"originallengthms" : [ 0.0 ],
-									"play" : [ 0 ],
-									"basictuning" : [ 440 ],
-									"pitchcorrection" : [ 0 ],
-									"mode" : [ "basic" ],
-									"slurtime" : [ 0.0 ],
-									"quality" : [ "basic" ],
-									"originaltempo" : [ 120.0 ],
 									"pitchshift" : [ 1.0 ],
 									"originallength" : [ 0.0, "ticks" ],
+									"quality" : [ "basic" ],
 									"timestretch" : [ 0 ],
-									"speed" : [ 1.0 ],
+									"originallengthms" : [ 0.0 ],
 									"formant" : [ 1.0 ],
+									"play" : [ 0 ],
 									"followglobaltempo" : [ 0 ],
-									"formantcorrection" : [ 0 ]
+									"basictuning" : [ 440 ],
+									"formantcorrection" : [ 0 ],
+									"pitchcorrection" : [ 0 ],
+									"slurtime" : [ 0.0 ],
+									"mode" : [ "basic" ],
+									"originaltempo" : [ 120.0 ],
+									"speed" : [ 1.0 ]
 								}
 
 							}
