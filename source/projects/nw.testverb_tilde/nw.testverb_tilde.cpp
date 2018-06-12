@@ -26,8 +26,8 @@ private:
     allpass         m_decay_diffusion_1L { 672, -0.70 };           ///< allpass filter 1L (TODO: modulation)
     allpass         m_decay_diffusion_1R { 908, -0.70 };           ///< allpass filter 1R (TODO: modulation)
     
-    delay<>         m_delay_1L { 4453 };                     ///< delay 1L
-    delay<>         m_delay_2L { 3720 };                     ///< delay 2L
+    delay			m_delay_1L { 4453 };                     ///< delay 1L
+    delay			m_delay_2L { 3720 };                     ///< delay 2L
     
     onepole         m_damping_1L { 0.0005 };                        ///< damping left
     onepole         m_damping_1R { 0.0005 };                        ///< damping right
@@ -35,8 +35,8 @@ private:
     allpass         m_decay_diffusion_2L { 1800, 0.5 };           ///< allpass filter 2L
     allpass         m_decay_diffusion_2R { 2656, 0.5 };           ///< allpass filter 2L
     
-    delay<>         m_delay_1R { 4217 };                     ///< delay 1L
-    delay<>         m_delay_2R { 3163 };                     ///< delay 2L
+    delay			m_delay_1R { 4217 };                     ///< delay 1L
+    delay			m_delay_2R { 3163 };                     ///< delay 2L
     
     sample          m_last_out_L;                   ///< last sample from the left channel
     sample          m_last_out_R;                   ///< last sample from the right channel
