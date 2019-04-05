@@ -123,7 +123,7 @@ public:
             
         }
         
-        return { output };
+        return output;
 	}
 
     

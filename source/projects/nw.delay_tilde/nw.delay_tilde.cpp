@@ -12,7 +12,7 @@ class delay : public object<delay>, public sample_operator<1,1> {
 private:
     // note: these must be created prior to any attributes that might set parameters below
     number              m_samples_per_second = samplerate();
-    lib::delay<>        m_delay { m_samples_per_second };        ///< delay filter
+    lib::delay          m_delay { m_samples_per_second };        ///< delay filter
     bool                m_needs_to_be_cleared = false;
     int                 m_delay_samps = 0;
     
@@ -67,7 +67,7 @@ public:
             number new_samples_per_second = samplerate();
             if (m_samples_per_second != new_samples_per_second) {
                 
-                lib::delay<> new_delay { new_samples_per_second };
+                lib::delay new_delay { new_samples_per_second };
                 new_delay.size( m_delay.size() );
                 
                 m_samples_per_second = new_samples_per_second;
@@ -105,7 +105,7 @@ public:
             
         }
         
-        return { output };
+        return output;
 	}
 
     

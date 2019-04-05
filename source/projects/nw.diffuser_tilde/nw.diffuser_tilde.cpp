@@ -14,7 +14,7 @@ private:
     lib::onepole        m_high_frequency_attenuation;          ///< onepole filter for input
     fifo<double>        m_high_frequency_coefficient { 10 };       ///< coefficient for onepole filter
     
-    lib::allpass		m_input_diffusion_1a(142);				///< allpass filter 1a
+    lib::allpass		m_input_diffusion_1a { 142 };				///< allpass filter 1a
     lib::allpass		m_input_diffusion_1b;				///< allpass filter 1b
     fifo<double>        m_input_diffusion_1_coefficient { 10 };       ///< coefficient for allpass filters 1a & 1b
     lib::allpass		m_input_diffusion_2a;				///< allpass filter 2a
