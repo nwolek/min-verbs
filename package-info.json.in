@@ -1,7 +1,7 @@
 {
 	"author" : "Nathan Wolek",
 	"description" : "Reverb externals for Max in a package built using the Min-API.",
-	"homepatcher" : "Min Object Development Kit.maxpat",
+	"homepatcher" : "Min-Verbs.maxpat",
 	"max_version_min" : "7.1", "max_version_max" : "none",
 	"name" : "@C74_PACKAGE_NAME@",
 	"os" : {
