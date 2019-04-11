@@ -12,7 +12,7 @@ class allpass : public object<allpass>, public sample_operator<1,1> {
 private:
     // note: these must be created prior to any attributes that might set parameters below
     
-    size_t              m_samples_per_second = samplerate();
+    number              m_samples_per_second = samplerate();
     lib::allpass        m_allpass_filter { m_samples_per_second };        ///< allpass filter
     bool                m_needs_to_be_cleared = false;
     int                 m_delay_samps = 0;
@@ -80,7 +80,7 @@ public:
             // Because the maximum size of our delay is one second, we have to protect against changes in sample rate.
             // To do this, we create a new allpass filter with the proper size and copy over the old parameter settings.
             
-            size_t new_samples_per_second = samplerate();
+            number new_samples_per_second = samplerate();
             if (m_samples_per_second != new_samples_per_second) {
                 
                 lib::allpass new_allpass_filter { new_samples_per_second };
